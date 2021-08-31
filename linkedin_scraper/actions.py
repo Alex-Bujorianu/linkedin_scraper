@@ -12,7 +12,18 @@ def __prompt_email_password():
 def page_has_loaded(driver):
     page_state = driver.execute_script('return document.readyState;')
     return page_state == 'complete'
-
+  
+def pick_random_connection(driver):
+    "Choose a LinkedIn connection to follow, at random."
+    # Maximise the screen because the chat crap is blocking the button.
+    driver.maximize_window()
+    connections_list_member = driver.find_elements_by_class_name("feed-follows-module-recommendation.member")
+    connections_list_company = driver.find_elements_by_class_name("feed-follows-module-recommendation.company")
+    connections_list = connections_list_member + connections_list_company
+    random_number = nprand.randint(0, len(connections_list))
+    button = connections_list[random_number].find_element(By.TAG_NAME, "button")
+    button.click()
+    
 def login(driver, email=None, password=None, cookie = None, timeout=10):
   if cookie is not None:
     return _login_with_cookie(driver, cookie)
